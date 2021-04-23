@@ -9,14 +9,8 @@ public class UserInput {
 
     public String createUser(User newUser){
         users.add(newUser);
-        return "\nWelcome to the library " + newUser.getUserName() + "!";
+        return "\nWelcome to the library " + newUser.getUserName() + "!\n";
     }
-    public String removeUser(int userId){
-        try {
-            users.remove(userId);
-        }catch (Exception ex){
-            return "Unable to remove user";
-        }
-        return "User removed successfully!\n";
-    }
+    void borrowBook(){}
+    void returnBook(){}
 }
