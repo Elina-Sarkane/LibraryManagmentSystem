@@ -11,6 +11,5 @@ public class UserInput {
         users.add(newUser);
         return "\nWelcome to the library " + newUser.getUserName() + "!\n";
     }
-    void borrowBook(){}
-    void returnBook(){}
+
 }

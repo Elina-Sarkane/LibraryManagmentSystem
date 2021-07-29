@@ -1,17 +1,78 @@
 package controller;
-import entity.Book;
+
 import entity.User;
+
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
     Scanner scanner = new Scanner(System.in);
     UserInput userInput = new UserInput();
-    BookList bookList = new BookList();
+    LibraryController libraryController = new LibraryController();
 
-    public void showLibrary() {
-        String[] libraryMenu = {"Log in", "View profile", "View book list", "Search books", "Borrow books", "Return books", "Log out"};
+    public void logInOptions(){
+        String[] logIn = {"User", "Librarian", "Exit"};
+        ImageIcon library = new ImageIcon("library.jpg");
+        String chooseOption = (String) JOptionPane.showInputDialog(
+                null,
+                "Choose option:",
+                "Welcome to the Library!",
+                JOptionPane.INFORMATION_MESSAGE,
+                library,
+                logIn,
+                logIn[0]
+        );
+        if (chooseOption == logIn[0]){
+            showUserLibrary();
+        }else if (chooseOption == logIn[1]){
+            showLibrary();
+        }else {
+            System.exit(0);
+        }
+    }
+
+    //menu for librarian
+    public void showLibrary(){
+        String[] libraryMenu = {"Add books", "View all books", "View single book", "Update book list", "Remove book", "Exit"};
+        ImageIcon library = new ImageIcon("library.jpg");
+        String chooseOption = (String) JOptionPane.showInputDialog(
+                null,
+                "Choose option:",
+                "Welcome to the Library!",
+                JOptionPane.INFORMATION_MESSAGE,
+                library,
+                libraryMenu,
+                libraryMenu[0]
+        );
+
+        if (chooseOption == libraryMenu[0]) {
+            libraryController.addBook();
+            showLibrary();
+        } else if (chooseOption == libraryMenu[1]) {
+            libraryController.viewAllBooks();
+            showLibrary();
+        } else if (chooseOption == libraryMenu[2]) {
+            libraryController.viewSingleBook();
+            showLibrary();
+        } else if (chooseOption == libraryMenu[3]) {
+            libraryController.updateBook();
+            showLibrary();
+        }else if (chooseOption == libraryMenu[4]){
+            libraryController.removeBook();
+            showLibrary();
+        } else {
+            System.out.println("Enter 1 to exit, or 2 to show main menu");
+            if(scanner.nextLine().equals("1")) {
+                System.exit(0);
+            }
+            logInOptions();
+        }
+        System.out.println("Press enter to continue");
+    }
+
+    //menu for user
+    public void showUserLibrary() {
+        String[] libraryMenu = {"Log in", "View book list", "Search books", "Borrow books", "Return books", "Log out"};
         ImageIcon library = new ImageIcon("library.jpg");
         String chooseOption = (String) JOptionPane.showInputDialog(
                 null,
@@ -25,26 +86,29 @@ public class Menu {
 
         if (chooseOption == libraryMenu[0]) {
             logIn();
-            showLibrary();
+            showUserLibrary();
         } else if (chooseOption == libraryMenu[1]) {
-            viewProfile();
-            showLibrary();
+            libraryController.viewAllBooks();
+            showUserLibrary();
         } else if (chooseOption == libraryMenu[2]) {
-            viewBooks();
-            showLibrary();
+            libraryController.searchBook();
+            showUserLibrary();
         } else if (chooseOption == libraryMenu[3]) {
-            searchBook();
-            showLibrary();
+            libraryController.borrowBook();
+            showUserLibrary();
         } else if (chooseOption == libraryMenu[4]) {
-            borrowBook();
-            showLibrary();
-        } else if (chooseOption == libraryMenu[5]) {
-            returnBook();
-            showLibrary();
+            libraryController.returnBook();
+            showUserLibrary();
         } else {
-            System.exit(0);
+            System.out.println("Enter 1 to exit, or 2 to show main menu");
+            if(scanner.nextLine().equals("1")) {
+                System.exit(0);
+            }
+            logInOptions();
         }
+        System.out.println("Press enter to continue");
     }
+
     private void logIn(){
         System.out.println("Enter User Name: ");
         String userName = scanner.nextLine();
@@ -55,21 +119,8 @@ public class Menu {
 
         User user = new User(userName, userEmail, userPassword);
         System.out.println(userInput.createUser(user));
-        }
-    void viewProfile(){
-
     }
-    void viewBooks(){
-        ArrayList<Book> allBooks = bookList.getAllBookList();
-        System.out.println("\tAll available books");
-        System.out.println("Id\tAuthor Name | Book Title | Publication year | Pages | Available amount\n");
 
-        int counter = 0;
-        for (Book bookList : allBooks) {
-            System.out.println(counter + ". \t" + bookList.authorName + " | " + bookList.bookTitle + " | " + bookList.bookYear + " | " + bookList.bookPageAmount + " | " + bookList.bookAmount);
-            counter++;
-        }
-    }
     void searchBook(){
         String[] searchBook = {"Author", "Title"};
         ImageIcon book = new ImageIcon("book.jpg");
@@ -87,7 +138,7 @@ public class Menu {
             String authorName = scanner.nextLine();
             System.out.println("Books found: ");
 
-            for (Book bookList : bookList.getAllBookList()){
+            /*for (Book bookList : library.getAllBookList()){
                 if (bookList.authorName.toLowerCase().contains(authorName)){
                     System.out.println(bookList.authorName + " | " + bookList.bookTitle + " | " + bookList.bookYear + " | " + bookList.bookPageAmount + " | " + bookList.bookAmount);
                 }
@@ -97,16 +148,12 @@ public class Menu {
             String bookName = scanner.nextLine();
             System.out.println("Books found: ");
 
-            for (Book bookList : bookList.getAllBookList()) {
+            for (Book bookList : library.getAllBookList()) {
                 if (bookList.bookTitle.toLowerCase().contains(bookName)) {
                     System.out.println(bookList.authorName + " | " + bookList.bookTitle + " | " + bookList.bookYear + " | " + bookList.bookPageAmount + " | " + bookList.bookAmount);
                 }
 
-            }
+            }*/
         }
-    }
-    void borrowBook(){
-    }
-    void returnBook(){
     }
 }
