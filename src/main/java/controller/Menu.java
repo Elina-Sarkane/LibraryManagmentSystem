@@ -1,14 +1,19 @@
 package controller;
 
+import entity.Book;
 import entity.User;
+import repository.LibraryRepository;
 
 import javax.swing.*;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Menu {
     Scanner scanner = new Scanner(System.in);
     UserInput userInput = new UserInput();
     LibraryController libraryController = new LibraryController();
+    LibraryRepository libraryRepository = new LibraryRepository();
+    Menu menu = new Menu();
 
     public void logInOptions(){
         String[] logIn = {"User", "Librarian", "Exit"};
@@ -121,8 +126,8 @@ public class Menu {
         System.out.println(userInput.createUser(user));
     }
 
-    void searchBook(){
-        String[] searchBook = {"Author", "Title"};
+    public void searchBook(){
+        String[] searchBook = {"Author", "Title", "Year", "Exit"};
         ImageIcon book = new ImageIcon("book.jpg");
         String chooseSearchOption = (String) JOptionPane.showInputDialog(
                 null,
@@ -133,27 +138,39 @@ public class Menu {
                 searchBook,
                 searchBook[0]
         );
-        if (chooseSearchOption == searchBook[0]){
-            System.out.println("\nSearch by author name: ");
-            String authorName = scanner.nextLine();
-            System.out.println("Books found: ");
+        try {
+            if (chooseSearchOption == searchBook[0]) {
+                System.out.println("\nSearch by author name: ");
+                String authorName = scanner.nextLine();
+                System.out.println("Books found: ");
 
-            /*for (Book bookList : library.getAllBookList()){
-                if (bookList.authorName.toLowerCase().contains(authorName)){
-                    System.out.println(bookList.authorName + " | " + bookList.bookTitle + " | " + bookList.bookYear + " | " + bookList.bookPageAmount + " | " + bookList.bookAmount);
+                for (Book bookList : libraryRepository.getAllBooksFromDatabase()) {
+                    if (bookList.authorName.toLowerCase().contains(authorName)) {
+                        System.out.println(bookList.authorName + " | " + bookList.bookTitle + " | " + bookList.bookYear + " | " + bookList.bookPageAmount + " | " + bookList.bookAmount);
+                    }
                 }
+            } else if (chooseSearchOption == searchBook[1]){
+                System.out.println("\nSearch by book title: ");
+                String bookName = scanner.nextLine();
+                System.out.println("Books found: ");
+
+                for (Book bookList : libraryRepository.getAllBooksFromDatabase()) {
+                    if (bookList.bookTitle.toLowerCase().contains(bookName)) {
+                        System.out.println(bookList.authorName + " | " + bookList.bookTitle + " | " + bookList.bookYear + " | " + bookList.bookPageAmount + " | " + bookList.bookAmount);
+                    }
+
+                }
+            }else if (chooseSearchOption == searchBook[2]){
+
+            }else {
+                System.out.println("Enter 1 to exit, or 2 to show main menu");
+                if (scanner.nextLine().equals("1")) {
+                    System.exit(0);
+                }
+                menu.showUserLibrary();
             }
-        }else{
-            System.out.println("\nSearch by book title: ");
-            String bookName = scanner.nextLine();
-            System.out.println("Books found: ");
-
-            for (Book bookList : library.getAllBookList()) {
-                if (bookList.bookTitle.toLowerCase().contains(bookName)) {
-                    System.out.println(bookList.authorName + " | " + bookList.bookTitle + " | " + bookList.bookYear + " | " + bookList.bookPageAmount + " | " + bookList.bookAmount);
-                }
-
-            }*/
+        }catch (SQLException ex){
+            ex.printStackTrace();
         }
     }
 }

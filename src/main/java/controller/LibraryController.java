@@ -118,6 +118,5 @@ public class LibraryController {
         bookList.forEach(System.out::println);
     }
 
-    public void searchBook() {
-    }
+    public void searchBook() { }
 }

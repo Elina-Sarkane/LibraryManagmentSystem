@@ -33,6 +33,7 @@ public class DBHandler {
             e.printStackTrace();
         }
     }
+
     public Connection getConnection(){
         return connection;
     }
