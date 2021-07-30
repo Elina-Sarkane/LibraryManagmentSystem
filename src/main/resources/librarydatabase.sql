@@ -14,4 +14,5 @@ last_updated timestamp default current_timestamp,
 primary key(id)
 );
 
+
 select * from books;
